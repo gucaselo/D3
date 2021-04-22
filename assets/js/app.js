@@ -76,7 +76,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("x", d => xLinearScale(d.healthcare))
     .attr("y", d => yLinearScale( d.poverty))
     .attr("class", "stateText")
+    .attr("text-anchor", "middle")
+    .attr("alignment-baseline", "central")
+    .attr("font-size", "10")
     .text(d => d.abbr)
+    // .attr("transform", "translate(0, 5)")
 
     /////////////////////////////////
 
