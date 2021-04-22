@@ -85,8 +85,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     /////////////////////////////////
     xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
     yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
-    var leftMargin = margin.left + 15
-    
 
     // Create axes labels
     // chartGroup.append("text")
@@ -118,13 +116,14 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         var bottomMargin = height + margin.top
 
         for(i=0; i<x.length; i++) {
-            console.log(i);
+            // console.log(i);
             
             leftMargin -= 20;
             bottomMargin += 12;
-            console.log(`left: ${leftMargin} & right: ${bottomMargin}`)
+            // console.log(`left: ${leftMargin} & right: ${bottomMargin}`)
 
-            chartGroup.append("text")   
+            chartGroup.append("g")
+            .append("text")   
             // .data(yAxisTexts)
             .attr("transform", "rotate(-90)")
             .attr("y", 0 - leftMargin)
@@ -132,19 +131,36 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .attr("dy", "1em")
             .attr("class", "aText")
             // Reverse the order for appending y labels because of the order of margins increments
-            .text(y[(y.length-1) - i]);
+            .text(y[(y.length-1) - i])
+            .classed("labels", true);
     
-            chartGroup.append("text")
+            chartGroup.append("g")
+            .append("text")
             // .data(x)
             .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
             .attr("class", "aText")
             // .text("In Poverty(%)");
             .text(x[i])
+            .classed("labels", true);
         }
     }
 
     axisLabels(xAxisTexts, yAxisTexts);
 
+    //////////////////////////////////
+    // var xSelection = d3.selectAll("text");
+    // // console.log(xSelection);
+    // xSelection.on("click", function(d) {
+    //     console.log(d3.select(this));
+    // })
+    // d3.select("g").on("click", function(d) {
+    //     console.log(d3.select(this).text())
+    //     // selection.style("color", "red");
+    // })
 
+    d3.selectAll(".labels").on("click", function(d) {
+        console.log(d3.select(this).text())
+    })
+    ////////////////////////////////
 });
 
