@@ -86,35 +86,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
     yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
 
-    // Create axes labels
-    // chartGroup.append("text")
-    //   .data(yAxisTexts)
-    //   .attr("transform", "rotate(-90)")
-    //   .attr("y", 0 - margin.left + 40)
-    // //   .attr("y", d => {
-    // //     leftMargin += 15;
-    // //     return `${0} - ${leftMargin}`      
-    // //   })
-    // //   .attr("y", 0 - margin.left + (40/xAxisTexts.length))
-    // //   .attr("y", xAxisTexts.forEach(d => {
-    // //     leftMargin += 15;
-    // //     return `${0} - ${leftMargin}`
-    // //     }))
-    //   .attr("x", 0 - (height / 2))
-    //   .attr("dy", "1em")
-    //   .attr("class", "aText")
-    // //   .text("Lacks Healthcare(%)");
-    //   .text(yAxisTexts, d => d)
-
-    // chartGroup.append("text")
-    //   .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
-    //   .attr("class", "aText")
-    //   .text("In Poverty(%)");
-
     function axisLabels(x, y) {
-        var leftMargin = margin.left
-        var bottomMargin = height + margin.top
-
+        var leftMargin = margin.left;
+        var bottomMargin = height + margin.top;
+        var counter = 0;
         for(i=0; i<x.length; i++) {
             // console.log(i);
             
@@ -132,7 +107,20 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .attr("class", "aText")
             // Reverse the order for appending y labels because of the order of margins increments
             .text(y[(y.length-1) - i])
-            .classed("labels", true);
+            .classed("labels", true)
+            .classed(function(d){
+                // counter = 0;
+                if (counter === 0) {
+                    console.log(`first Y: ${counter}`)
+                    counter += 1;
+                    console.log(`after first Y: ${counter}`)
+                    return active
+                }
+                else {
+                    counter += 1;
+                    return inactive
+                }
+            }, true);
     
             chartGroup.append("g")
             .append("text")
@@ -141,23 +129,27 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             .attr("class", "aText")
             // .text("In Poverty(%)");
             .text(x[i])
-            .classed("labels", true);
+            .classed("labels", true)
+            .classed(function(d){
+                // counter = 0;
+                if (counter === 0) {
+                    console.log(`first X: ${counter}`)
+                    counter += 1;
+                    console.log(`After first X: ${counter}`)
+                    return active
+                }
+                else if (counter > 0) {
+                    counter += 1;
+                    return inactive
+                }
+            }, true);
+            var counter =+ 1;
         }
     }
 
     axisLabels(xAxisTexts, yAxisTexts);
 
     //////////////////////////////////
-    // var xSelection = d3.selectAll("text");
-    // // console.log(xSelection);
-    // xSelection.on("click", function(d) {
-    //     console.log(d3.select(this));
-    // })
-    // d3.select("g").on("click", function(d) {
-    //     console.log(d3.select(this).text())
-    //     // selection.style("color", "red");
-    // })
-
     d3.selectAll(".labels").on("click", function(d) {
         console.log(d3.select(this).text())
     })
