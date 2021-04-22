@@ -83,21 +83,67 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // .attr("transform", "translate(0, 5)")
 
     /////////////////////////////////
+    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
+    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
+    var leftMargin = margin.left + 15
+    
 
     // Create axes labels
-    chartGroup.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 40)
-      .attr("x", 0 - (height / 2))
-      .attr("dy", "1em")
-      .attr("class", "aText")
-      .text("Lacks Healthcare(%)");
+    // chartGroup.append("text")
+    //   .data(yAxisTexts)
+    //   .attr("transform", "rotate(-90)")
+    //   .attr("y", 0 - margin.left + 40)
+    // //   .attr("y", d => {
+    // //     leftMargin += 15;
+    // //     return `${0} - ${leftMargin}`      
+    // //   })
+    // //   .attr("y", 0 - margin.left + (40/xAxisTexts.length))
+    // //   .attr("y", xAxisTexts.forEach(d => {
+    // //     leftMargin += 15;
+    // //     return `${0} - ${leftMargin}`
+    // //     }))
+    //   .attr("x", 0 - (height / 2))
+    //   .attr("dy", "1em")
+    //   .attr("class", "aText")
+    // //   .text("Lacks Healthcare(%)");
+    //   .text(yAxisTexts, d => d)
 
-    chartGroup.append("text")
-      .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
-      .attr("class", "aText")
-      .text("In Poverty(%)");
+    // chartGroup.append("text")
+    //   .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+    //   .attr("class", "aText")
+    //   .text("In Poverty(%)");
 
+    function axisLabels(x, y) {
+        var leftMargin = margin.left
+        var bottomMargin = height + margin.top
+
+        for(i=0; i<x.length; i++) {
+            console.log(i);
+            
+            leftMargin -= 20;
+            bottomMargin += 12;
+            console.log(`left: ${leftMargin} & right: ${bottomMargin}`)
+
+            chartGroup.append("text")   
+            // .data(yAxisTexts)
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - leftMargin)
+            .attr("x", 0 - (height / 2))
+            .attr("dy", "1em")
+            .attr("class", "aText")
+            // Reverse the order for appending y labels because of the order of margins increments
+            .text(y[(y.length-1) - i]);
+    
+            chartGroup.append("text")
+            // .data(x)
+            .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
+            .attr("class", "aText")
+            // .text("In Poverty(%)");
+            .text(x[i])
+        }
+    }
+
+    axisLabels(xAxisTexts, yAxisTexts);
 
 
 });
