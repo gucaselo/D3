@@ -29,11 +29,19 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     censusData.forEach(function(data) {
         data.healthcare = +data.healthcare;
         data.poverty = +data.poverty;
+        data.age = +data.age;
+        data.income = +data.income;
+        data.smokes = +data.smokes;
+        data.obesity = +data.obesity;
       });
     
     //   Create scale functions
     // ==============================
+    var nameid = `d.healthcare`
+    console.log(nameid)
+
     var xLinearScale = d3.scaleLinear()
+    // .domain(d3.extent(censusData, d => d.healthcare))
     .domain(d3.extent(censusData, d => d.healthcare))
     // d3.extent(medalData, d => d.date)
     .range([0, width]);
@@ -56,6 +64,31 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     chartGroup.append("g")
     .call(leftAxis);
 
+    //////////////////////////////////***************** */
+    
+    function filterData(data) {
+        selection = d3.select(this).text()
+        // console.log(selection)
+        if (selection === "In Poverty (%)") {
+            console.log("Selection poverty % was made");
+            console.log(censusData.map(d => d.poverty));
+            // result = data.Poverty;
+            // return result
+        }
+        else if (selection === "Age (Median)") {
+            console.log("Selection age median was made");
+            console.log(censusData)
+        }
+
+        else {
+            console.log("an unknown selection was made")
+        }
+    }
+
+
+
+    ///////////////////////////////****************/
+
     // Create Circles
     // ==============================
     var circlesGroup = chartGroup.selectAll("circle")
@@ -63,7 +96,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .enter()
     .append("circle")
     .attr("cx", d => xLinearScale(d.healthcare))
-    .attr("cy", d => yLinearScale( d.poverty))
+    // .attr("cx", function(d) {
+
+    //     return xLinearScale(d.healthcare)
+    // })
+    .attr("cy", d => yLinearScale(d.poverty))
     .attr("r", "10")
     .attr("class", "stateCircle")
     // .attr("fill", "pink")
@@ -74,7 +111,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .enter()
     .append("text")
     .attr("x", d => xLinearScale(d.healthcare))
-    .attr("y", d => yLinearScale( d.poverty))
+    .attr("y", d => yLinearScale(d.poverty))
     .attr("class", "stateText")
     .attr("text-anchor", "middle")
     .attr("alignment-baseline", "central")
@@ -150,9 +187,14 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     axisLabels(xAxisTexts, yAxisTexts);
 
     //////////////////////////////////
-    d3.selectAll(".labels").on("click", function(d) {
-        console.log(d3.select(this).text())
-    })
+    // d3.selectAll(".labels").on("click", function(d) {
+    //     console.log(d3.select(this).text())
+    // })
+    d3.selectAll(".labels").on("click", filterData);
     ////////////////////////////////
+
+    // var xSelection = d3.selectAll(".labels");
+
+    // xSelection.on("click",
 });
 
