@@ -92,7 +92,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     chartGroup.append("g")
     .call(leftAxis);
 
-    //////////////////////////////////***************** */
     
     // function filterData(selection) {
     //     // selection = d3.select(this).text()
@@ -117,27 +116,65 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     //     }
     // }
 
-
-
-    ///////////////////////////////****************/
-
     // Create Circles
     // ==============================
+
+    // Add axis labels when page loads
+    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
+    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
+
+    var leftMargin = margin.left;
+    var bottomMargin = height + margin.top;
+    var counter = 0;
+    for(i=0; i<xAxisTexts.length; i++) {
+        
+        leftMargin -= 20;
+        bottomMargin += 12;
+
+        var yLabels = chartGroup.append("g")
+        .append("text")   
+        // .data(yAxisTexts)
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - leftMargin)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("class", "aText")
+        // Reverse the order for appending y labels because of the order of margins increments
+        .text(yAxisTexts[(yAxisTexts.length-1) - i])
+        .classed("labels", true)
+        .classed("inactive", true);
+
+        var xLabels = chartGroup.append("g")
+        .append("text")
+        // .data(x)
+        .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
+        .attr("class", "aText")
+        // .text("In Poverty(%)");
+        .text(xAxisTexts[i])
+        .classed("labels", true)
+        .classed("inactive", true);
+
+
     function updatePlot(selection, xValue, yValue) {
+        // if (!chartGroup.empty()) {
+        //     chartGroup.remove();
+        //   };
         // console.log(selection);
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("div").data(censusData);
-        var xLinearScale = d3.scaleLinear().range([0, width]);
-        var yLinearScale = d3.scaleLinear().range([height, 0]);
+        var xLinearScale = d3.scaleLinear();
+        var yLinearScale = d3.scaleLinear();
 
         // Update Axis
-        xLinearScale.domain(d3.extent(censusData, d => d[xValue])) 
-        yLinearScale.domain(d3.extent(censusData, d => d[yValue]))    
+        xLinearScale.domain(d3.extent(censusData, d => d[xValue]))
+                    .range([0, width]);
+        yLinearScale.domain(d3.extent(censusData, d => d[yValue]))
+                    .range([height, 0])    
 
         // Create Circles
         circlesGroup.enter()
         .append("circle")
-        .merge(circlesGroup)
+        // .merge(circlesGroup)
         .transition()
         .duration(500)
         .attr("cx", d => xLinearScale(d[xValue]))
@@ -148,7 +185,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         //Add Text to Circles
         textGroup.enter()
         .append("text")
-        .merge(textGroup)
+        // .merge(textGroup)
         .transition()
         .duration(500)
         .attr("x", d => xLinearScale(d[xValue]))
@@ -170,11 +207,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   
         chartGroup.append("g")
         .call(leftAxis);
+
+        // axisLabels(xAxisTexts, yAxisTexts);
     }
 
     /////////////////////////////////
-    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
-    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
+
 
     function axisLabels(x, y) {
         var leftMargin = margin.left;
@@ -214,7 +252,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         }
     }
 
-    axisLabels(xAxisTexts, yAxisTexts);
+    // axisLabels(xAxisTexts, yAxisTexts);
     // console.log(d3.selectAll(".inactive").html())
 
      d3.selectAll(".labels").on("click", function(d) {
@@ -250,5 +288,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // var selection = d3.select(this).text();
         updatePlot(selection, xValue, yValue);
     })
+}
 
 });
+
