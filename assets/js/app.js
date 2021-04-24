@@ -11,7 +11,7 @@ var margin = {
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
-// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
+// Create an SVG wrapper, append an SVG group that will hold the chart, and shift the latter by left and top margins.
 var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgWidth)
@@ -29,7 +29,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     console.log(censusData);
 
     // Parse Data/Cast as numbers
-    // ==============================
     censusData.forEach(function(data) {
         data.healthcare = +data.healthcare;
         data.poverty = +data.poverty;
@@ -40,14 +39,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
       });
     
     //   Create scale functions
-    // ==============================
     var xLinearScale = d3.scaleLinear()
-    // .domain(d3.extent(censusData, d => d[xValue]))
     .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
     .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-    // .domain(d3.extent(censusData, d => d[yValue]))
     .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
     .range([height, 0]);
 
@@ -81,7 +77,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .text(d => d.abbr);
 
     // Create axis functions
-    // ==============================
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
@@ -301,10 +296,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
             }
         }
-        // d3.select(this).classed("active", true);
-        // d3.select(this).classed("inactive", false);
-         
-        // var selection = d3.select(this).text();
+
         updatePlot(selection, xValue, yValue);
     })
 
