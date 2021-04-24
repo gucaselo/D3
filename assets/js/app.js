@@ -225,8 +225,10 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // ==============================
     function updatePlot(selection, xValue, yValue) {
         // console.log(selection);
+        // circlesGroup.remove()
+        // chartGroup.selectAll("circle").remove()
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
-        var textGroup = chartGroup.selectAll("div").data(censusData);
+        var textGroup = chartGroup.selectAll("text").data(censusData);
         var xLinearScale = d3.scaleLinear().range([0, width]);
         var yLinearScale = d3.scaleLinear().range([height, 0]);
 
@@ -270,7 +272,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   
         chartGroup.append("g")
         .call(leftAxis);
-    }
+    };
 
     /////////////////////////////////
     xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
