@@ -43,10 +43,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // ==============================
     var xLinearScale = d3.scaleLinear()
     .domain(d3.extent(censusData, d => d[xValue]))
+    // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
     .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
     .domain(d3.extent(censusData, d => d[yValue]))
+    // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
     .range([height, 0]);
 
     // Add data //
@@ -92,35 +94,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     chartGroup.append("g")
     .call(leftAxis);
 
-    //////////////////////////////////***************** */
-    
-    // function filterData(selection) {
-    //     // selection = d3.select(this).text()
-    //     // selection = d3.select("g").selectAll(".labels").text()
-    //     console.log(selection)
-    //     if (selection === "In Poverty (%)") {
-    //         console.log("Selection poverty % was made");
-    //         // console.log(censusData.map(d => d.poverty));
-    //         var result = censusData.map(d => d.poverty);
-    //         console.log(result)
-    //         return result
-    //     }
-    //     else if (selection === "Age (Median)") {
-    //         // console.log("Selection age median was made");
-    //         var result = censusData.map(d => d.age);
-    //         return result
-    //     }
-    //     else if (selection === "Household Income (Median)") {
-    //         // console.log("an unknown selection was made")
-    //         var result = censusData.map(d => d.age);
-    //         return result
-    //     }
-    // }
-
-
-
-    ///////////////////////////////****************/
-
     // Add axis labels when page loads
     xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
     yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
@@ -131,28 +104,28 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     
     // X Axis Labels
     var xPoverty = chartGroup.append("g")
-    .append("text")
-    .attr("transform", `translate(${width / 2}, ${bottomMargin + 12})`)
-    .attr("class", "aText")
-    .text("In Poverty(%)")
-    .classed("labels", true)
-    .classed("active", true);
+        .append("text")
+        .attr("transform", `translate(${width / 2}, ${bottomMargin + 12})`)
+        .attr("class", "aText")
+        .text("In Poverty (%)")
+        .classed("labels", true)
+        .classed("active", true);
 
     var xAge = chartGroup.append("g")
-    .append("text")
-    .attr("transform", `translate(${width / 2}, ${bottomMargin + 24})`)
-    .attr("class", "aText")
-    .text("Age (Median)")
-    .classed("labels", true)
-    .classed("inactive", true);
+        .append("text")
+        .attr("transform", `translate(${width / 2}, ${bottomMargin + 24})`)
+        .attr("class", "aText")
+        .text("Age (Median)")
+        .classed("labels", true)
+        .classed("inactive", true);
 
     var xIncome = chartGroup.append("g")
-    .append("text")
-    .attr("transform", `translate(${width / 2}, ${bottomMargin + 36})`)
-    .attr("class", "aText")
-    .text("Household Income (Median)")
-    .classed("labels", true)
-    .classed("inactive", true);
+        .append("text")
+        .attr("transform", `translate(${width / 2}, ${bottomMargin + 36})`)
+        .attr("class", "aText")
+        .text("Household Income (Median)")
+        .classed("labels", true)
+        .classed("inactive", true);
 
     // Y Axis Labels
     var yHealthcare = chartGroup.append("g")
@@ -225,16 +198,39 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // ==============================
     function updatePlot(selection, xValue, yValue) {
         // console.log(selection);
-        // circlesGroup.remove()
-        // chartGroup.selectAll("circle").remove()
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("text").data(censusData);
-        var xLinearScale = d3.scaleLinear().range([0, width]);
-        var yLinearScale = d3.scaleLinear().range([height, 0]);
+        // var xLinearScale = d3.scaleLinear();
+        // var yLinearScale = d3.scaleLinear();
 
         // Update Axis
-        xLinearScale.domain(d3.extent(censusData, d => d[xValue])) 
-        yLinearScale.domain(d3.extent(censusData, d => d[yValue]))    
+
+        var xLinearScale = d3.scaleLinear()
+        .domain(d3.extent(censusData, d => d[xValue]))
+        // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
+        .range([0, width]);
+
+        var yLinearScale = d3.scaleLinear()
+        .domain(d3.extent(censusData, d => d[yValue]))
+        // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
+        .range([height, 0]);
+
+        // var xLinearScale = d3.scaleLinear()
+        // .domain(d3.extent(censusData, d => d[xValue]))
+        // .range([0, width]);
+    
+        // var yLinearScale = d3.scaleLinear()
+        // .domain(d3.extent(censusData, d => d[yValue]))
+        // .range([height, 0]);
+
+
+        // Update Axis
+        // xLinearScale.domain(d3.extent(censusData, d => d[xValue]))
+        //             .range([0, width]);
+
+
+        // yLinearScale.domain(d3.extent(censusData, d => d[yValue]))
+        //             .range([height, 0]);
 
         // Create Circles
         circlesGroup.enter()
@@ -364,7 +360,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             }
         }
 
-        else if (selection === "Obese (%)" || selection === "Smokes (%)" || selection === "Lacks Healthcare(%)") {
+        else if (selection === "Obese (%)" || selection === "Smokes (%)" || selection === "Lacks Healthcare (%)") {
             if (selection === "Obese (%)") {
                 yValue = "obesity";
                 
@@ -393,7 +389,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                     .classed("inactive", true);
 
             }
-            else if (selection === "Lacks Healthcare(%)"){
+            else if (selection === "Lacks Healthcare (%)"){
                 yValue = "healthcare";
 
                 yHealthcare
