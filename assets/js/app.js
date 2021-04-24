@@ -113,8 +113,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // .attr("opacity", ".5");
 
         // console.log(selection);
-        var circlesGroup = chartGroup.selectAll("circle").data(censusData)
-        var textGroup = chartGroup.selectAll("div").data(censusData)
+        var circlesGroup = chartGroup.selectAll("circle").data(censusData);
+        var textGroup = chartGroup.selectAll("div").data(censusData);
         var xLinearScale = d3.scaleLinear().range([0, width]);
         var yLinearScale = d3.scaleLinear().range([height, 0]);
 
@@ -128,6 +128,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 circlesGroup.enter()
                 .append("circle")
                 .merge(circlesGroup)
+                .transition()
+                .duration(500)
                 .attr("cx", d => xLinearScale(d.poverty))
                 .attr("cy", d => yLinearScale(d.healthcare))
                 .attr("r", "10")
@@ -137,6 +139,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 textGroup.enter()
                 .append("text")
                 .merge(textGroup)
+                .transition()
+                .duration(500)
                 .attr("x", d => xLinearScale(d.poverty))
                 .attr("y", d => yLinearScale(d.healthcare))
                 .attr("class", "stateText")
@@ -155,6 +159,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 circlesGroup.enter()
                 .append("circle")
                 .merge(circlesGroup)
+                .transition()
+                .duration(500)
                 .attr("cx", d => xLinearScale(d.age))
                 .attr("cy", d => yLinearScale(d.healthcare))
                 .attr("r", "10")
@@ -164,6 +170,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 textGroup.enter()
                 .append("text")
                 .merge(textGroup)
+                .transition()
+                .duration(500)
                 .attr("x", d => xLinearScale(d.age))
                 .attr("y", d => yLinearScale(d.healthcare))
                 .attr("class", "stateText")
@@ -180,6 +188,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 circlesGroup.enter()
                 .append("circle")
                 .merge(circlesGroup)
+                .transition()
+                .duration(500)
                 .attr("cx", d => xLinearScale(d.income))
                 .attr("cy", d => yLinearScale(d.healthcare))
                 .attr("r", "10")
@@ -189,6 +199,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
                 textGroup.enter()
                 .append("text")
                 .merge(textGroup)
+                .transition()
+                .duration(500)
                 .attr("x", d => xLinearScale(d.income))
                 .attr("y", d => yLinearScale(d.healthcare))
                 .attr("class", "stateText")
