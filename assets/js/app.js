@@ -37,8 +37,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     
     //   Create scale functions
     // ==============================
-    var nameid = `d.healthcare`
-    console.log(nameid)
+    // var nameid = `d.healthcare`
+    // console.log(nameid)
 
     var xLinearScale = d3.scaleLinear()
     // .domain(d3.extent(censusData, d => d.healthcare))
@@ -66,22 +66,26 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     //////////////////////////////////***************** */
     
-    function filterData(data) {
-        selection = d3.select(this).text()
-        // console.log(selection)
+    function filterData(selection) {
+        // selection = d3.select(this).text()
+        // selection = d3.select("g").selectAll(".labels").text()
+        console.log(selection)
         if (selection === "In Poverty (%)") {
             console.log("Selection poverty % was made");
-            console.log(censusData.map(d => d.poverty));
-            // result = data.Poverty;
-            // return result
+            // console.log(censusData.map(d => d.poverty));
+            var result = censusData.map(d => d.poverty);
+            console.log(result)
+            return result
         }
         else if (selection === "Age (Median)") {
-            console.log("Selection age median was made");
-            console.log(censusData)
+            // console.log("Selection age median was made");
+            var result = censusData.map(d => d.age);
+            return result
         }
-
-        else {
-            console.log("an unknown selection was made")
+        else if (selection === "Household Income (Median)") {
+            // console.log("an unknown selection was made")
+            var result = censusData.map(d => d.age);
+            return result
         }
     }
 
@@ -91,33 +95,127 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     // Create Circles
     // ==============================
-    var circlesGroup = chartGroup.selectAll("circle")
-    .data(censusData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d.healthcare))
-    // .attr("cx", function(d) {
+    function updatePlot(selection) {
+        // var circlesGroup = chartGroup.selectAll("circle")
+        // .data(censusData)
+        // .enter()
+        // .append("circle")
+        // // .attr("cx", d => xLinearScale(d.healthcare))
+        // .attr("cx", xLinearScale(filterData(selection)))
+        // // .attr("cx", function(d) {
+    
+        // //     return xLinearScale(d.healthcare)
+        // // })
+        // .attr("cy", d => yLinearScale(d.poverty))
+        // .attr("r", "10")
+        // .attr("class", "stateCircle")
+        // // .attr("fill", "pink")
+        // .attr("opacity", ".5");
 
-    //     return xLinearScale(d.healthcare)
-    // })
-    .attr("cy", d => yLinearScale(d.poverty))
-    .attr("r", "10")
-    .attr("class", "stateCircle")
-    // .attr("fill", "pink")
-    .attr("opacity", ".5");
+        // console.log(selection);
+        var circlesGroup = chartGroup.selectAll("circle").data(censusData)
+        var textGroup = chartGroup.selectAll("div").data(censusData)
+        var xLinearScale = d3.scaleLinear().range([0, width]);
+        var yLinearScale = d3.scaleLinear().range([height, 0]);
 
-    var textGroup = chartGroup.selectAll("div")
-    .data(censusData)
-    .enter()
-    .append("text")
-    .attr("x", d => xLinearScale(d.healthcare))
-    .attr("y", d => yLinearScale(d.poverty))
-    .attr("class", "stateText")
-    .attr("text-anchor", "middle")
-    .attr("alignment-baseline", "central")
-    .attr("font-size", "10")
-    .text(d => d.abbr)
-    // .attr("transform", "translate(0, 5)")
+        if (selection === "In Poverty (%)") {
+            // Update Axis
+            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
+            yLinearScale.domain(d3.extent(censusData, d => d.poverty))
+
+            // Create Circles
+            circlesGroup.enter()
+            .append("circle")
+            .merge(circlesGroup)
+            .attr("cx", d => xLinearScale(d.healthcare))
+            .attr("cy", d => yLinearScale(d.poverty))
+            .attr("r", "10")
+            .attr("class", "stateCircle")
+
+            //Add Text to Circles
+            textGroup.enter()
+            .append("text")
+            .merge(textGroup)
+            .attr("x", d => xLinearScale(d.healthcare))
+            .attr("y", d => yLinearScale(d.poverty))
+            .attr("class", "stateText")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "central")
+            .attr("font-size", "10")
+            .text(d => d.abbr)
+
+        }
+        else if (selection === "Age (Median)") {
+            // Update Axis
+            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
+            yLinearScale.domain(d3.extent(censusData, d => d.age))
+            
+            // Create Circles
+            circlesGroup.enter()
+            .append("circle")
+            .merge(circlesGroup)
+            .attr("cx", d => xLinearScale(d.healthcare))
+            .attr("cy", d => yLinearScale(d.age))
+            .attr("r", "10")
+            .attr("class", "stateCircle")
+
+            //Add Text to Circles
+            textGroup.enter()
+            .append("text")
+            .merge(textGroup)
+            .attr("x", d => xLinearScale(d.healthcare))
+            .attr("y", d => yLinearScale(d.age))
+            .attr("class", "stateText")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "central")
+            .attr("font-size", "10")
+            .text(d => d.abbr)
+        }
+        else if (selection === "Household Income (Median)") {
+            // Update Axis
+            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
+            yLinearScale.domain(d3.extent(censusData, d => d.income))
+            
+            circlesGroup.enter()
+            .append("circle")
+            .merge(circlesGroup)
+            .attr("cx", d => xLinearScale(d.healthcare))
+            .attr("cy", d => yLinearScale(d.income))
+            .attr("r", "10")
+            .attr("class", "stateCircle")
+
+            //Add Text to Circles
+            textGroup.enter()
+            .append("text")
+            .merge(textGroup)
+            .attr("x", d => xLinearScale(d.healthcare))
+            .attr("y", d => yLinearScale(d.income))
+            .attr("class", "stateText")
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "central")
+            .attr("font-size", "10")
+            .text(d => d.abbr)
+        }
+    
+        // Create axis functions
+        // ==============================
+        var bottomAxis = d3.axisBottom(xLinearScale);
+        var leftAxis = d3.axisLeft(yLinearScale);
+    
+        // var textGroup = chartGroup.selectAll("div")
+        // .data(censusData)
+        // .enter()
+        // .append("text")
+        // .attr("x", d => xLinearScale(d.healthcare))
+        // .attr("y", d => yLinearScale(d.poverty))
+        // .attr("class", "stateText")
+        // .attr("text-anchor", "middle")
+        // .attr("alignment-baseline", "central")
+        // .attr("font-size", "10")
+        // .text(d => d.abbr)
+        // // .attr("transform", "translate(0, 5)")
+    }
+
 
     /////////////////////////////////
     xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
@@ -145,19 +243,19 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             // Reverse the order for appending y labels because of the order of margins increments
             .text(y[(y.length-1) - i])
             .classed("labels", true)
-            .classed(function(d){
-                // counter = 0;
-                if (counter === 0) {
-                    console.log(`first Y: ${counter}`)
-                    counter += 1;
-                    console.log(`after first Y: ${counter}`)
-                    return active
-                }
-                else {
-                    counter += 1;
-                    return inactive
-                }
-            }, true);
+            // .classed(function(d){
+            //     // counter = 0;
+            //     if (counter === 0) {
+            //         console.log(`first Y: ${counter}`)
+            //         counter += 1;
+            //         console.log(`after first Y: ${counter}`)
+            //         return active
+            //     }
+            //     else {
+            //         counter += 1;
+            //         return inactive
+            //     }
+            // }, true);
     
             chartGroup.append("g")
             .append("text")
@@ -167,20 +265,20 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             // .text("In Poverty(%)");
             .text(x[i])
             .classed("labels", true)
-            .classed(function(d){
-                // counter = 0;
-                if (counter === 0) {
-                    console.log(`first X: ${counter}`)
-                    counter += 1;
-                    console.log(`After first X: ${counter}`)
-                    return active
-                }
-                else if (counter > 0) {
-                    counter += 1;
-                    return inactive
-                }
-            }, true);
-            var counter =+ 1;
+            // .classed(function(d){
+            //     // counter = 0;
+            //     if (counter === 0) {
+            //         console.log(`first X: ${counter}`)
+            //         counter += 1;
+            //         console.log(`After first X: ${counter}`)
+            //         return active
+            //     }
+            //     else if (counter > 0) {
+            //         counter += 1;
+            //         return inactive
+            //     }
+            // }, true);
+            // var counter =+ 1;
         }
     }
 
@@ -190,7 +288,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // d3.selectAll(".labels").on("click", function(d) {
     //     console.log(d3.select(this).text())
     // })
-    d3.selectAll(".labels").on("click", filterData);
+    // d3.selectAll(".labels").on("click", updatePlot);
+
+     d3.selectAll(".labels").on("click", function(d) {
+        var selection = d3.select(this).text();
+        updatePlot(selection);
+    })
+
     ////////////////////////////////
 
     // var xSelection = d3.selectAll(".labels");
