@@ -252,8 +252,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .attr("x", d => xLinearScale(d[xValue]))
         .attr("y", d => yLinearScale(d[yValue]))
         .attr("class", "stateText")
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "central")
+        // .attr("text-anchor", "middle")
+        // .attr("alignment-baseline", "central")
         .attr("font-size", "10")
         .text(d => d.abbr);
 
