@@ -200,37 +200,28 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // console.log(selection);
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("text").data(censusData);
-        // var xLinearScale = d3.scaleLinear();
-        // var yLinearScale = d3.scaleLinear();
+        var xLinearScale = d3.scaleLinear();
+        var yLinearScale = d3.scaleLinear();
 
         // Update Axis
-
-        var xLinearScale = d3.scaleLinear()
-        .domain(d3.extent(censusData, d => d[xValue]))
-        // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
-        .range([0, width]);
-
-        var yLinearScale = d3.scaleLinear()
-        .domain(d3.extent(censusData, d => d[yValue]))
-        // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
-        .range([height, 0]);
-
         // var xLinearScale = d3.scaleLinear()
         // .domain(d3.extent(censusData, d => d[xValue]))
+        // // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
         // .range([0, width]);
-    
+
         // var yLinearScale = d3.scaleLinear()
         // .domain(d3.extent(censusData, d => d[yValue]))
+        // // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
         // .range([height, 0]);
 
 
         // Update Axis
-        // xLinearScale.domain(d3.extent(censusData, d => d[xValue]))
-        //             .range([0, width]);
+        xLinearScale.domain(d3.extent(censusData, d => d[xValue]))
+                    .range([0, width]);
 
 
-        // yLinearScale.domain(d3.extent(censusData, d => d[yValue]))
-        //             .range([height, 0]);
+        yLinearScale.domain(d3.extent(censusData, d => d[yValue]))
+                    .range([height, 0]);
 
         // Create Circles
         circlesGroup.enter()
@@ -252,8 +243,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .attr("x", d => xLinearScale(d[xValue]))
         .attr("y", d => yLinearScale(d[yValue]))
         .attr("class", "stateText")
-        // .attr("text-anchor", "middle")
-        // .attr("alignment-baseline", "central")
         .attr("font-size", "10")
         .text(d => d.abbr);
 
