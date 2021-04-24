@@ -121,6 +121,43 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     ///////////////////////////////****************/
 
+    // Add axis labels when page loads
+    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
+    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
+
+    var leftMargin = margin.left;
+    var bottomMargin = height + margin.top;
+    var counter = 0;
+    for(i=0; i<xAxisTexts.length; i++) {
+        
+        leftMargin -= 20;
+        bottomMargin += 12;
+
+        var yLabels = chartGroup.append("g")
+        .append("text")   
+        // .data(yAxisTexts)
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - leftMargin)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .attr("class", "aText")
+        // Reverse the order for appending y labels because of the order of margins increments
+        .text(yAxisTexts[(yAxisTexts.length-1) - i])
+        .classed("labels", true)
+        .classed("inactive", true);
+
+        var xLabels = chartGroup.append("g")
+        .append("text")
+        // .data(x)
+        .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
+        .attr("class", "aText")
+        // .text("In Poverty(%)");
+        .text(xAxisTexts[i])
+        .classed("labels", true)
+        .classed("inactive", true);
+        
+    };
+
     // Create Circles
     // ==============================
     function updatePlot(selection, xValue, yValue) {
@@ -214,7 +251,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         }
     }
 
-    axisLabels(xAxisTexts, yAxisTexts);
+    // axisLabels(xAxisTexts, yAxisTexts);
     // console.log(d3.selectAll(".inactive").html())
 
      d3.selectAll(".labels").on("click", function(d) {
