@@ -59,8 +59,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     circlesGroup.enter()
     .append("circle")
     .merge(circlesGroup)
-    .transition()
-    .duration(500)
+    // .transition()
+    // .duration(1000)
     .attr("cx", d => xLinearScale(d[xValue]))
     .attr("cy", d => yLinearScale(d[yValue]))
     .attr("r", "10")
@@ -70,8 +70,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     textGroup.enter()
     .append("text")
     .merge(textGroup)
-    .transition()
-    .duration(500)
+    // .transition()
+    // .duration(1000)
     .attr("x", d => xLinearScale(d[xValue]))
     .attr("y", d => yLinearScale(d[yValue]))
     .attr("class", "stateText")
@@ -161,101 +161,39 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .classed("labels", true)
         .classed("inactive", true);
 
-
-
-    ///////////////////////////////////
-    // for(i=0; i<xAxisTexts.length; i++) {
-        
-    //     leftMargin -= 20;
-    //     bottomMargin += 12;
-
-    //     var yLabels = chartGroup.append("g")
-    //     .append("text")   
-    //     // .data(yAxisTexts)
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 0 - leftMargin)
-    //     .attr("x", 0 - (height / 2))
-    //     .attr("dy", "1em")
-    //     .attr("class", "aText")
-    //     // Reverse the order for appending y labels because of the order of margins increments
-    //     .text(yAxisTexts[(yAxisTexts.length-1) - i])
-    //     .classed("labels", true)
-    //     .classed("inactive", true);
-
-        // var xLabels = chartGroup.append("g")
-        // .append("text")
-        // // .data(x)
-        // .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
-        // .attr("class", "aText")
-        // // .text("In Poverty(%)");
-        // .text(xAxisTexts[i])
-        // .classed("labels", true)
-        // .classed("inactive", true);
-        
-    // };
-
     // Create Circles
-    // ==============================
     function updatePlot(selection, xValue, yValue) {
         // console.log(selection);
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("text").data(censusData);
-        // var xLinearScale = d3.scaleLinear();
-        // var yLinearScale = d3.scaleLinear();
 
         // Update Axis
         var xLinearScale = d3.scaleLinear()
-        // .domain(d3.extent(censusData, d => d[xValue]))
         .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
         .range([0, width]);
 
         var yLinearScale = d3.scaleLinear()
-        // .domain(d3.extent(censusData, d => d[yValue]))
         .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
         .range([height, 0]);
-
-
-        // Update Axis
-        // xLinearScale
-            // .domain(d3.extent(censusData, d => d[xValue]))
-            // .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
-            // .range([0, width]);
-
-
-        // yLinearScale
-            // .domain(d3.extent(censusData, d => d[yValue]))
-            // .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
-            // .range([height, 0]);
-
         
-        // Create axis functions/////////////////////////////////////
-        // ==============================
+        // Create axis
         var bottomAxis = d3.axisBottom(xLinearScale);
         var leftAxis = d3.axisLeft(yLinearScale);
 
-        // chartGroup.append("g")
-        // // .transition()
-        // // .duration(500)
-        // .attr("transform", `translate(0, ${height})`)
-        // .call(bottomAxis);
-
         xAxis.transition()
-            .duration(500)
+            .duration(1000)
             .call(bottomAxis);
   
-        // chartGroup.append("g")
-        // .transition()
-        // .duration(500)
         yAxis.transition()
-        .duration(500)
-        .call(leftAxis);/////////////////////////////////////
+        .duration(1000)
+        .call(leftAxis);
 
         // Create Circles
         circlesGroup.enter()
         .append("circle")
         .merge(circlesGroup)
         .transition()
-        .duration(500)
+        .duration(1000)
         .attr("cx", d => xLinearScale(d[xValue]))
         .attr("cy", d => yLinearScale(d[yValue]))
         .attr("r", "10")
@@ -266,7 +204,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .append("text")
         .merge(textGroup)
         .transition()
-        .duration(500)
+        .duration(1000)
         .attr("x", d => xLinearScale(d[xValue]))
         .attr("y", d => yLinearScale(d[yValue]))
         .attr("class", "stateText")
@@ -275,54 +213,8 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     };
 
-    /////////////////////////////////
-    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
-    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
-
-    function axisLabels(x, y) {
-        var leftMargin = margin.left;
-        var bottomMargin = height + margin.top;
-        var counter = 0;
-        for(i=0; i<x.length; i++) {
-            // console.log(i);
-            
-            leftMargin -= 20;
-            bottomMargin += 12;
-            // console.log(`left: ${leftMargin} & right: ${bottomMargin}`)
-
-            chartGroup.append("g")
-            .append("text")   
-            // .data(yAxisTexts)
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - leftMargin)
-            .attr("x", 0 - (height / 2))
-            .attr("dy", "1em")
-            .attr("class", "aText")
-            // Reverse the order for appending y labels because of the order of margins increments
-            .text(y[(y.length-1) - i])
-            .classed("labels", true)
-            .classed("inactive", true);
-    
-            chartGroup.append("g")
-            .append("text")
-            // .data(x)
-            .attr("transform", `translate(${width / 2}, ${bottomMargin})`)
-            .attr("class", "aText")
-            // .text("In Poverty(%)");
-            .text(x[i])
-            .classed("labels", true)
-            .classed("inactive", true);
-
-            // console.log(chartGroup.selectAll(".aText").node())
-        }
-    }
-
-    // axisLabels(xAxisTexts, yAxisTexts);
-    // console.log(d3.selectAll(".inactive").html())
-
      d3.selectAll(".labels").on("click", function(d) {
         var selection = d3.select(this).text();
-        // axisLabels(xAxisTexts, yAxisTexts);
         console.log(selection)
 
         if (selection === "In Poverty (%)" || selection === "Age (Median)" || selection === "Household Income (Median)") {
