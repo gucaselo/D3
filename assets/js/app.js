@@ -87,11 +87,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     // Append Axes to the chart
     // ==============================
-    chartGroup.append("g")
+    var xAxis = chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(bottomAxis);
 
-    chartGroup.append("g")
+    var yAxis = chartGroup.append("g")
     .call(leftAxis);
 
     // Add axis labels when page loads
@@ -200,32 +200,55 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         // console.log(selection);
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("text").data(censusData);
-        var xLinearScale = d3.scaleLinear();
-        var yLinearScale = d3.scaleLinear();
+        // var xLinearScale = d3.scaleLinear();
+        // var yLinearScale = d3.scaleLinear();
 
         // Update Axis
-        // var xLinearScale = d3.scaleLinear()
+        var xLinearScale = d3.scaleLinear()
         // .domain(d3.extent(censusData, d => d[xValue]))
-        // // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
-        // .range([0, width]);
+        .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
+        .range([0, width]);
 
-        // var yLinearScale = d3.scaleLinear()
+        var yLinearScale = d3.scaleLinear()
         // .domain(d3.extent(censusData, d => d[yValue]))
-        // // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
-        // .range([height, 0]);
+        .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
+        .range([height, 0]);
 
 
         // Update Axis
-        xLinearScale
+        // xLinearScale
             // .domain(d3.extent(censusData, d => d[xValue]))
-            .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
-            .range([0, width]);
+            // .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
+            // .range([0, width]);
 
 
-        yLinearScale
+        // yLinearScale
             // .domain(d3.extent(censusData, d => d[yValue]))
-            .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
-            .range([height, 0]);
+            // .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
+            // .range([height, 0]);
+
+        
+        // Create axis functions/////////////////////////////////////
+        // ==============================
+        var bottomAxis = d3.axisBottom(xLinearScale);
+        var leftAxis = d3.axisLeft(yLinearScale);
+
+        // chartGroup.append("g")
+        // // .transition()
+        // // .duration(500)
+        // .attr("transform", `translate(0, ${height})`)
+        // .call(bottomAxis);
+
+        xAxis.transition()
+            .duration(500)
+            .call(bottomAxis);
+  
+        // chartGroup.append("g")
+        // .transition()
+        // .duration(500)
+        yAxis.transition()
+        .duration(500)
+        .call(leftAxis);/////////////////////////////////////
 
         // Create Circles
         circlesGroup.enter()
@@ -250,25 +273,6 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .attr("font-size", "10")
         .text(d => d.abbr);
 
-        // Create axis functions
-        // ==============================
-        var bottomAxis = d3.axisBottom(xLinearScale);
-        var leftAxis = d3.axisLeft(yLinearScale);
-
-        var xAxis = chartGroup.append("g")
-        // .transition()
-        // .duration(500)
-        .attr("transform", `translate(0, ${height})`)
-        .call(bottomAxis);
-
-        xAxis.transition()
-            .duration(1000)
-            .call(bottomAxis);
-  
-        chartGroup.append("g")
-        // .transition()
-        // .duration(500)
-        .call(leftAxis);
     };
 
     /////////////////////////////////
