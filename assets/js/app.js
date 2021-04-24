@@ -316,7 +316,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
   
         chartGroup.append("g")
         .call(leftAxis);
-    
+        
         // var textGroup = chartGroup.selectAll("div")
         // .data(censusData)
         // .enter()
@@ -396,11 +396,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             //     }
             // }, true);
             // var counter =+ 1;
+            console.log(chartGroup.selectAll(".aText").node())
         }
     }
 
     axisLabels(xAxisTexts, yAxisTexts);
-    console.log(d3.selectAll(".inactive").html())
+    // console.log(d3.selectAll(".inactive").html())
 
     //////////////////////////////////
     // d3.selectAll(".labels").on("click", function(d) {
