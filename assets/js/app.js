@@ -255,11 +255,19 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         var bottomAxis = d3.axisBottom(xLinearScale);
         var leftAxis = d3.axisLeft(yLinearScale);
 
-        chartGroup.append("g")
+        var xAxis = chartGroup.append("g")
+        // .transition()
+        // .duration(500)
         .attr("transform", `translate(0, ${height})`)
         .call(bottomAxis);
+
+        xAxis.transition()
+            .duration(1000)
+            .call(bottomAxis);
   
         chartGroup.append("g")
+        // .transition()
+        // .duration(500)
         .call(leftAxis);
     };
 
