@@ -42,13 +42,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     //   Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-    .domain(d3.extent(censusData, d => d[xValue]))
-    // .domain([d3.min(censusData, d => d[xValue]), d3.max(censusData, d => d[xValue])])
+    // .domain(d3.extent(censusData, d => d[xValue]))
+    .domain([d3.min(censusData, d => d[xValue] - 1), d3.max(censusData, d => d[xValue])])
     .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-    .domain(d3.extent(censusData, d => d[yValue]))
-    // .domain([d3.min(censusData, d => d[yValue]), d3.max(censusData, d => d[yValue])])
+    // .domain(d3.extent(censusData, d => d[yValue]))
+    .domain([d3.min(censusData, d => d[yValue] - 1), d3.max(censusData, d => d[yValue])])
     .range([height, 0]);
 
     // Add data //
@@ -216,12 +216,16 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
 
         // Update Axis
-        xLinearScale.domain(d3.extent(censusData, d => d[xValue]))
-                    .range([0, width]);
+        xLinearScale
+            // .domain(d3.extent(censusData, d => d[xValue]))
+            .domain([d3.min(censusData, d => d[xValue] - 1), d3.max(censusData, d => d[xValue])])
+            .range([0, width]);
 
 
-        yLinearScale.domain(d3.extent(censusData, d => d[yValue]))
-                    .range([height, 0]);
+        yLinearScale
+            // .domain(d3.extent(censusData, d => d[yValue]))
+            .domain([d3.min(censusData, d => d[yValue] - 1), d3.max(censusData, d => d[yValue])])
+            .range([height, 0]);
 
         // Create Circles
         circlesGroup.enter()
