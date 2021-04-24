@@ -42,12 +42,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     var xLinearScale = d3.scaleLinear()
     // .domain(d3.extent(censusData, d => d.healthcare))
-    .domain(d3.extent(censusData, d => d.healthcare))
+    .domain(d3.extent(censusData, d => d.poverty))
     // d3.extent(medalData, d => d.date)
     .range([0, width]);
 
     var yLinearScale = d3.scaleLinear()
-    .domain(d3.extent(censusData, d => d.poverty))
+    .domain(d3.extent(censusData, d => d.healthcare))
     .range([height, 0]);
 
     // Create axis functions
@@ -118,89 +118,180 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         var xLinearScale = d3.scaleLinear().range([0, width]);
         var yLinearScale = d3.scaleLinear().range([height, 0]);
 
-        if (selection === "In Poverty (%)") {
-            // Update Axis
-            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
-            yLinearScale.domain(d3.extent(censusData, d => d.poverty))
-
-            // Create Circles
-            circlesGroup.enter()
-            .append("circle")
-            .merge(circlesGroup)
-            .attr("cx", d => xLinearScale(d.healthcare))
-            .attr("cy", d => yLinearScale(d.poverty))
-            .attr("r", "10")
-            .attr("class", "stateCircle")
-
-            //Add Text to Circles
-            textGroup.enter()
-            .append("text")
-            .merge(textGroup)
-            .attr("x", d => xLinearScale(d.healthcare))
-            .attr("y", d => yLinearScale(d.poverty))
-            .attr("class", "stateText")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .attr("font-size", "10")
-            .text(d => d.abbr)
-
+        if (selection === "In Poverty (%)" || selection === "Age (Median)" || selection === "Household Income (Median)") {
+            if (selection === "In Poverty (%)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.poverty)) 
+                yLinearScale.domain(d3.extent(censusData, d => d.healthcare))    
+    
+                // Create Circles
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.poverty))
+                .attr("cy", d => yLinearScale(d.healthcare))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.poverty))
+                .attr("y", d => yLinearScale(d.healthcare))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+    
+            }
+            else if (selection === "Age (Median)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.age))
+                yLinearScale.domain(d3.extent(censusData, d => d.healthcare))
+                
+                // Create Circles
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.age))
+                .attr("cy", d => yLinearScale(d.healthcare))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.age))
+                .attr("y", d => yLinearScale(d.healthcare))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+            }
+            else if (selection === "Household Income (Median)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.income));
+                yLinearScale.domain(d3.extent(censusData, d => d.healthcare));
+                
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.income))
+                .attr("cy", d => yLinearScale(d.healthcare))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.income))
+                .attr("y", d => yLinearScale(d.healthcare))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+            }
         }
-        else if (selection === "Age (Median)") {
-            // Update Axis
-            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
-            yLinearScale.domain(d3.extent(censusData, d => d.age))
-            
-            // Create Circles
-            circlesGroup.enter()
-            .append("circle")
-            .merge(circlesGroup)
-            .attr("cx", d => xLinearScale(d.healthcare))
-            .attr("cy", d => yLinearScale(d.age))
-            .attr("r", "10")
-            .attr("class", "stateCircle")
 
-            //Add Text to Circles
-            textGroup.enter()
-            .append("text")
-            .merge(textGroup)
-            .attr("x", d => xLinearScale(d.healthcare))
-            .attr("y", d => yLinearScale(d.age))
-            .attr("class", "stateText")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .attr("font-size", "10")
-            .text(d => d.abbr)
+        else if (selection === "Obese (%)" || selection === "Smokes (%)" || selection === "Lacks Healthcare(%)") {
+            if (selection === "Obese (%)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.poverty)) 
+                yLinearScale.domain(d3.extent(censusData, d => d.obesity))    
+    
+                // Create Circles
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.poverty))
+                .attr("cy", d => yLinearScale(d.obesity))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.poverty))
+                .attr("y", d => yLinearScale(d.obesity))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+    
+            }
+            else if (selection === "Smokes (%)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.age))
+                yLinearScale.domain(d3.extent(censusData, d => d.smokes))
+                
+                // Create Circles
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.age))
+                .attr("cy", d => yLinearScale(d.smokes))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.age))
+                .attr("y", d => yLinearScale(d.smokes))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+            }
+            else if (selection === "Lacks Healthcare(%)") {
+                // Update Axis
+                xLinearScale.domain(d3.extent(censusData, d => d.income));
+                yLinearScale.domain(d3.extent(censusData, d => d.healthcare));
+                
+                circlesGroup.enter()
+                .append("circle")
+                .merge(circlesGroup)
+                .attr("cx", d => xLinearScale(d.income))
+                .attr("cy", d => yLinearScale(d.healthcare))
+                .attr("r", "10")
+                .attr("class", "stateCircle");
+    
+                //Add Text to Circles
+                textGroup.enter()
+                .append("text")
+                .merge(textGroup)
+                .attr("x", d => xLinearScale(d.income))
+                .attr("y", d => yLinearScale(d.healthcare))
+                .attr("class", "stateText")
+                .attr("text-anchor", "middle")
+                .attr("alignment-baseline", "central")
+                .attr("font-size", "10")
+                .text(d => d.abbr);
+            }
         }
-        else if (selection === "Household Income (Median)") {
-            // Update Axis
-            xLinearScale.domain(d3.extent(censusData, d => d.healthcare))
-            yLinearScale.domain(d3.extent(censusData, d => d.income))
-            
-            circlesGroup.enter()
-            .append("circle")
-            .merge(circlesGroup)
-            .attr("cx", d => xLinearScale(d.healthcare))
-            .attr("cy", d => yLinearScale(d.income))
-            .attr("r", "10")
-            .attr("class", "stateCircle")
-
-            //Add Text to Circles
-            textGroup.enter()
-            .append("text")
-            .merge(textGroup)
-            .attr("x", d => xLinearScale(d.healthcare))
-            .attr("y", d => yLinearScale(d.income))
-            .attr("class", "stateText")
-            .attr("text-anchor", "middle")
-            .attr("alignment-baseline", "central")
-            .attr("font-size", "10")
-            .text(d => d.abbr)
-        }
+        
     
         // Create axis functions
         // ==============================
         var bottomAxis = d3.axisBottom(xLinearScale);
         var leftAxis = d3.axisLeft(yLinearScale);
+
+        chartGroup.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(bottomAxis);
+  
+        chartGroup.append("g")
+        .call(leftAxis);
     
         // var textGroup = chartGroup.selectAll("div")
         // .data(censusData)
