@@ -38,7 +38,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         data.obesity = +data.obesity;
       });
     
-    //   Create scale functions
+    // Create scale functions
     var xLinearScale = d3.scaleLinear()
     .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
     .range([0, width]);
@@ -47,14 +47,17 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
     .range([height, 0]);
 
-    // Add data //
-    var circlesGroup = chartGroup.selectAll("circle").data(censusData);
-    var textGroup = chartGroup.selectAll("div").data(censusData);
+    // Add data
+    // var circlesGroup = chartGroup.selectAll("circle").data(censusData);
+    // var textGroup = chartGroup.selectAll("div").data(censusData);
 
     // Create Circles
-    circlesGroup.enter()
+    var circlesGroup = chartGroup.selectAll("circle")
+    .data(censusData)
+    .enter()
+    // circlesGroup.enter()
     .append("circle")
-    .merge(circlesGroup)
+    // .merge(circlesGroup)
     // .transition()
     // .duration(1000)
     .attr("cx", d => xLinearScale(d[xValue]))
@@ -63,9 +66,12 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("class", "stateCircle");
 
     //Add Text to Circles
-    textGroup.enter()
+    var textGroup = chartGroup.selectAll("div")
+    .data(censusData)
+    .enter()
+    // textGroup.enter()
     .append("text")
-    .merge(textGroup)
+    // .merge(textGroup)
     // .transition()
     // .duration(1000)
     .attr("x", d => xLinearScale(d[xValue]))
@@ -75,6 +81,33 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("alignment-baseline", "central")
     .attr("font-size", "10")
     .text(d => d.abbr);
+
+    // Tool tip
+    var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    // .offset([80, -60])
+    .html(function(d) {
+      return (`${d.state}`);
+    });
+
+    circlesGroup.call(toolTip);
+    textGroup.call(toolTip);
+
+    // circlesGroup.on("mouseover", function(d) {
+    //     toolTip.show(d, this);
+    //   })
+    //   // Step 4: Create "mouseout" event listener to hide tooltip
+    //     .on("mouseout", function(d) {
+    //       toolTip.hide(d);
+    //     });
+    
+    textGroup.on("mouseover", function(d) {
+        toolTip.show(d, this);
+        })
+        // Step 4: Create "mouseout" event listener to hide tooltip
+        .on("mouseout", function(d) {
+            toolTip.hide(d);
+        });
 
     // Create axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
@@ -208,6 +241,41 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     };
 
+    // Tool tip function
+    // function updateToolTip() {
+
+    //     // var label;
+      
+    //     // if (chosenXAxis === "hair_length") {
+    //     //   label = "Hair Length:";
+    //     // }
+    //     // else {
+    //     //   label = "# of Albums:";
+    //     // }
+      
+    //     var toolTip = d3.tip()
+    //       .attr("class", "d3-tip")
+    //       .offset([80, -60])
+    //       .html(function(d) {
+    //         return (`${d.state}`);
+    //       });
+      
+    //     circlesGroup.call(toolTip);
+      
+    //     circlesGroup.on("mouseover", function(data) {
+    //       toolTip.show(data);
+    //     })
+    //       // onmouseout event
+    //       .on("mouseout", function(data, index) {
+    //         toolTip.hide(data);
+    //       });
+      
+    //     return circlesGroup;
+    //   }
+    
+    // updateToolTip
+    // var circlesGroup = updateToolTip(circlesGroup);
+
      d3.selectAll(".labels").on("click", function(d) {
         var selection = d3.select(this).text();
         console.log(selection)
@@ -299,5 +367,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
         updatePlot(selection, xValue, yValue);
     })
+
+    // // Tool tip
+    // d3.selectAll("circle").on("mouseover", function(d) {
+    //     var selected = d3.select(this).text();
+    //     console.log(selected);
+
+
+    // });
 
 });
