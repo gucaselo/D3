@@ -82,32 +82,35 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("font-size", "10")
     .text(d => d.abbr);
 
-    // Tool tip
-    var toolTip = d3.tip()
-    .attr("class", "d3-tip")
-    // .offset([80, -60])
-    .html(function(d) {
-      return (`${d.state}`);
-    });
-
-    circlesGroup.call(toolTip);
-    textGroup.call(toolTip);
-
-    // circlesGroup.on("mouseover", function(d) {
-    //     toolTip.show(d, this);
-    //   })
-    //   // Step 4: Create "mouseout" event listener to hide tooltip
-    //     .on("mouseout", function(d) {
-    //       toolTip.hide(d);
-    //     });
-    
-    textGroup.on("mouseover", function(d) {
-        toolTip.show(d, this);
-        })
-        // Step 4: Create "mouseout" event listener to hide tooltip
-        .on("mouseout", function(d) {
-            toolTip.hide(d);
+    function updateToolTip(xValue, yValue) {
+        // Tool tip
+        var toolTip = d3.tip()
+        .attr("class", "d3-tip")
+        // .offset([80, -60])
+        .html(function(d) {
+        return (`${d.state}<br>${xValue}: ${d[xValue]}<br>${yValue}: ${d[yValue]}`);
         });
+
+        circlesGroup.call(toolTip);
+        textGroup.call(toolTip);
+
+        // circlesGroup.on("mouseover", function(d) {
+        //     toolTip.show(d, this);
+        //   })
+        //   // Step 4: Create "mouseout" event listener to hide tooltip
+        //     .on("mouseout", function(d) {
+        //       toolTip.hide(d);
+        //     });
+        
+        textGroup.on("mouseover", function(d) {
+            toolTip.show(d, this);
+            })
+            // Step 4: Create "mouseout" event listener to hide tooltip
+            .on("mouseout", function(d) {
+                toolTip.hide(d);
+            });
+
+    }
 
     // Create axis functions
     var bottomAxis = d3.axisBottom(xLinearScale);
@@ -188,6 +191,9 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .text("Obese (%)")
         .classed("labels", true)
         .classed("inactive", true);
+    
+    // Initialize tooltips with default values
+    updateToolTip(xValue, yValue);
 
     // Create Circles
     function updatePlot(selection, xValue, yValue) {
@@ -274,7 +280,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     //   }
     
     // updateToolTip
-    // var circlesGroup = updateToolTip(circlesGroup);
+    // updateToolTip(xValue, yValue);
 
      d3.selectAll(".labels").on("click", function(d) {
         var selection = d3.select(this).text();
@@ -366,6 +372,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         }
 
         updatePlot(selection, xValue, yValue);
+        updateToolTip(xValue, yValue);
     })
 
     // // Tool tip
