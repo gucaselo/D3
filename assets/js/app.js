@@ -8,6 +8,7 @@ var margin = {
   left: 100
 };
 
+// Ajust plot location by setting some margins from svg area
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
@@ -47,19 +48,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
     .range([height, 0]);
 
-    // Add data
-    // var circlesGroup = chartGroup.selectAll("circle").data(censusData);
-    // var textGroup = chartGroup.selectAll("div").data(censusData);
-
     // Create Circles
     var circlesGroup = chartGroup.selectAll("circle")
     .data(censusData)
     .enter()
-    // circlesGroup.enter()
     .append("circle")
-    // .merge(circlesGroup)
-    // .transition()
-    // .duration(1000)
     .attr("cx", d => xLinearScale(d[xValue]))
     .attr("cy", d => yLinearScale(d[yValue]))
     .attr("r", "10")
@@ -69,11 +62,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     var textGroup = chartGroup.selectAll("div")
     .data(censusData)
     .enter()
-    // textGroup.enter()
     .append("text")
-    // .merge(textGroup)
-    // .transition()
-    // .duration(1000)
     .attr("x", d => xLinearScale(d[xValue]))
     .attr("y", d => yLinearScale(d[yValue]))
     .attr("class", "stateText")
@@ -82,42 +71,37 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .attr("font-size", "10")
     .text(d => d.abbr);
 
+    //----------------------------------------------------//
+    //  Update Tooltip function based on axis selection  //
+    //--------------------------------------------------//
     function updateToolTip(xValue, yValue) {
+        
         // Tool tip
         var toolTip = d3.tip()
         .attr("class", "d3-tip")
-        // .offset([80, -60])
         .html(function(d) {
         return (`${d.state}<br>${xValue}: ${d[xValue]}<br>${yValue}: ${d[yValue]}`);
         });
 
-        circlesGroup.call(toolTip);
+        // circlesGroup.call(toolTip);
         textGroup.call(toolTip);
-
-        // circlesGroup.on("mouseover", function(d) {
-        //     toolTip.show(d, this);
-        //   })
-        //   // Step 4: Create "mouseout" event listener to hide tooltip
-        //     .on("mouseout", function(d) {
-        //       toolTip.hide(d);
-        //     });
         
+        // Used text group instead of circleGroup because it was easier than finding the circle lines
         textGroup.on("mouseover", function(d) {
             toolTip.show(d, this);
             })
-            // Step 4: Create "mouseout" event listener to hide tooltip
+            // "mouseout" event listener to hide tooltip
             .on("mouseout", function(d) {
                 toolTip.hide(d);
             });
 
     }
 
-    // Create axis functions
+    // Create Axes
     var bottomAxis = d3.axisBottom(xLinearScale);
     var leftAxis = d3.axisLeft(yLinearScale);
 
     // Append Axes to the chart
-    // ==============================
     var xAxis = chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(bottomAxis);
@@ -125,13 +109,9 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     var yAxis = chartGroup.append("g")
     .call(leftAxis);
 
-    // Add axis labels when page loads
-    xAxisTexts = ["In Poverty (%)", "Age (Median)", "Household Income (Median)"];
-    yAxisTexts = ["Lacks Healthcare(%)", "Smokes (%)", "Obese (%)"];
-
+    // Assigning margins values
     var leftMargin = margin.left;
     var bottomMargin = height + margin.top;
-    var counter = 0;
     
     // X Axis Labels
     var xPoverty = chartGroup.append("g")
@@ -195,13 +175,15 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     // Initialize tooltips with default values
     updateToolTip(xValue, yValue);
 
-    // Create Circles
+    //--------------------------------------------------------//
+    //  Function to update Plot based on user Axis selection  //
+    //--------------------------------------------------------//
     function updatePlot(selection, xValue, yValue) {
-        // console.log(selection);
+
         var circlesGroup = chartGroup.selectAll("circle").data(censusData);
         var textGroup = chartGroup.selectAll("text").data(censusData);
 
-        // Update Axis
+        // Update Axes
         var xLinearScale = d3.scaleLinear()
         .domain([d3.min(censusData, d => d[xValue] * 0.97), d3.max(censusData, d => d[xValue])])
         .range([0, width]);
@@ -210,10 +192,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .domain([d3.min(censusData, d => d[yValue] * 0.89), d3.max(censusData, d => d[yValue])])
         .range([height, 0]);
         
-        // Create axis
+        // Create Axes
         var bottomAxis = d3.axisBottom(xLinearScale);
         var leftAxis = d3.axisLeft(yLinearScale);
 
+        // Transition added to calling updated Axes
         xAxis.transition()
             .duration(1000)
             .call(bottomAxis);
@@ -222,7 +205,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .duration(1000)
         .call(leftAxis);
 
-        // Create Circles
+        // Create Circles for Scatter Plot
         circlesGroup.enter()
         .append("circle")
         .merge(circlesGroup)
@@ -233,7 +216,7 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
         .attr("r", "10")
         .attr("class", "stateCircle");
 
-        //Add Text to Circles
+        //Add Text to Circles for Scatter Plot using state abbreviations
         textGroup.enter()
         .append("text")
         .merge(textGroup)
@@ -247,47 +230,16 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
     };
 
-    // Tool tip function
-    // function updateToolTip() {
 
-    //     // var label;
-      
-    //     // if (chosenXAxis === "hair_length") {
-    //     //   label = "Hair Length:";
-    //     // }
-    //     // else {
-    //     //   label = "# of Albums:";
-    //     // }
-      
-    //     var toolTip = d3.tip()
-    //       .attr("class", "d3-tip")
-    //       .offset([80, -60])
-    //       .html(function(d) {
-    //         return (`${d.state}`);
-    //       });
-      
-    //     circlesGroup.call(toolTip);
-      
-    //     circlesGroup.on("mouseover", function(data) {
-    //       toolTip.show(data);
-    //     })
-    //       // onmouseout event
-    //       .on("mouseout", function(data, index) {
-    //         toolTip.hide(data);
-    //       });
-      
-    //     return circlesGroup;
-    //   }
-    
-    // updateToolTip
-    // updateToolTip(xValue, yValue);
-
+    // Event listeners. On click update plot based on Axis selection
      d3.selectAll(".labels").on("click", function(d) {
         var selection = d3.select(this).text();
-        console.log(selection)
+        // console.log(selection)
 
+        // If X Axis was selected
         if (selection === "In Poverty (%)" || selection === "Age (Median)" || selection === "Household Income (Median)") {
             if (selection === "In Poverty (%)") {
+                // Assign X Axis value to update plot
                 xValue = "poverty";
                 xPoverty
                     .classed("active", true)
@@ -326,7 +278,9 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             }
         }
 
+        // Else If Y Axis was selected
         else if (selection === "Obese (%)" || selection === "Smokes (%)" || selection === "Lacks Healthcare (%)") {
+            // Assign Y Axis value to update plot
             if (selection === "Obese (%)") {
                 yValue = "obesity";
                 
@@ -371,16 +325,11 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
             }
         }
 
+        // Update Plot with updated selected Axes values
         updatePlot(selection, xValue, yValue);
+
+        // Update Tooltip with updated selected Axes values
         updateToolTip(xValue, yValue);
     })
-
-    // // Tool tip
-    // d3.selectAll("circle").on("mouseover", function(d) {
-    //     var selected = d3.select(this).text();
-    //     console.log(selected);
-
-
-    // });
 
 });
