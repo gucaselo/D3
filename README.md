@@ -18,6 +18,9 @@ Y Axis:
 * Smokes
 * Obesity
 
+
+<img src="img/demo.PNG" width=75%/>
+
 To access this interactive scatter plot [click here](https://gucaselo.github.io/D3/).
 
 ### Reference
