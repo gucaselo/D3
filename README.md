@@ -19,7 +19,7 @@ Y Axis:
 * Obesity
 
 
-<img src="img/demo.PNG" width=75%/>
+<img src="img/d3_demo.gif" width=75%/>
 
 To access this interactive scatter plot [click here](https://gucaselo.github.io/D3/).
 
